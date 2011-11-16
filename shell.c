@@ -100,6 +100,7 @@ int main(int argc, char **argv, char **envp){
 	
 	flagbg = 0;
 	while (1) {
+		//inicializando flagbg
 		flagbg = 0;
 		printf("%s", prompt);
 		strcpy(argv[0], "pwd");
