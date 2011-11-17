@@ -1,0 +1,73 @@
+Funções Implementadas e alguns comentários sobre elas
+
+void eval(char*, int, int[], int[]);
+  ->Evaluate command line - executa a command line
+
+int builtin_cmd(char**);
+  ->Função que verifica e trata os comandos internos (built in command), retornando "1" se é built in command e 0 caso nao
+
+void builtin_bgfg(char**);
+  ->Executa os comando bg e fg
+
+void builtin_cd(char**);
+  ->Executa o comando cd 
+
+void builtin_pwd(char**);
+  ->Executa comando pwd 
+
+void waitfg(pid_t);
+  ->bloqueia pid do processo até que não é mais o processo em primeiro plano 
+
+void sigchld_handler(int);
+  ->Trata processos zumbis job list
+
+void sigtstp_handler(int);
+  ->O kernel envia para o shell SIGTSTP toda vez que o ctrl+z é pressionado no teclado com isso enviamos o sinal SIGTSTP para o processo e setamos seu estado para ST
+
+void sigint_handler(int);
+  ->O kernel envia para o shell SIGINT toda vez que o ctrl+c é pressionado no teclado com isso enviamos o sinal SIGINT para o processo interrompendo ele
+
+int parseline(const char*, char**);
+  ->Função que trata a command line, separa o comando e trata seus parâmetros 
+
+void sigquit_handler(int);
+  ->Finaliza, após a recepção do sinal SIGQUIT
+
+void limpajob(struct job_t*);
+  ->Clear the entries in a job struct 
+
+void inicializaAllJobs(struct job_t*);
+  ->Inicializar todos os jobs um a um 
+
+int maxjid(struct job_t*);
+  ->Retorna o maior ID alocado
+
+int addjob(struct job_t*, pid_t, int, char*);
+  ->Adiciona um job à lista. Se adicionou retorna "1", senão "0" 
+
+int excluijob(struct job_t*, pid_t);
+  ->Deleta um determinado job através do pid
+
+pid_t fgpid(struct job_t*);
+  ->Retorna o PID do atual job em foreground, ou 0 caso não exista 
+
+struct job_t *getjobpid(struct job_t*, pid_t);
+  ->Busca um job por PID na job list 
+
+struct job_t *getjobjid(struct job_t*, int);
+  ->Busca um job por JID na job list
+
+int pidtojid(pid_t);
+  ->ID para job ID 
+
+void builtin_jobs(struct job_t*);
+  ->Listando os Jobs 
+
+handler_t *signal(int, handler_t*);
+  ->Encaminhamento de qual funcao ira tratar o sinal
+
+void check_redir (char*);
+  ->Esta funcao checa se o comando digitado pede redirecionamento. Se sim, ele vai setar as flags corretas e realizar o redirecionamento adequado
+
+void redir ();
+  ->Esta funcao, chamada depois de eval, irá resetar as flags para redirecionamento
