@@ -1,3 +1,10 @@
+/*Trabalho de SO II - Implementação de um Shell
+  
+  Integrantes: 
+	Guilherme de Almeida Lacruz, 6920161
+	Pedro Augusto Neto, 6550781
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -20,7 +27,7 @@
 #define BG 2    /* background */
 #define ST 3    /* stopped    */
 
-char prompt[] = "usuario:~";    /* Nome do shell */
+char prompt[] = "Shell:~";    /* Nome do shell */
 int verbose = 0;
 int nextjid = 1;
 int flagbg = 0;
@@ -147,9 +154,13 @@ void eval(char *cmdline, int frompipe, int ifd[2], int fdstd[2]) {
 	char *after_cmdline;
 	int topipe = 0; /*Flag para o pipe*/
 	int pfd[2]; /*File descriptor do pipe*/
-
+	
+	//SE a string (comand line) a ser analisada comecar a partir de um pipe ENTAO ...
 	if(frompipe ){
+		//Fileno => retorna o valor de um descritor de arquivo, no caso, stdin
+		//Cria uma copia do descritor de arquivo stdin e armazena em fdstd[0]
 		fdstd[0] = dup(fileno(stdin));
+		//Redireciona a entrada padrao (stdin) para ifd[0]
 		dup2( ifd[0], 0);
 	}
 
@@ -160,6 +171,7 @@ void eval(char *cmdline, int frompipe, int ifd[2], int fdstd[2]) {
 		strncpy(for_cmdline, cmdline, strlen(cmdline) - strlen(after_cmdline) );
 		for_cmdline[strlen(cmdline) - strlen(after_cmdline)] = '\0';
 		strcpy( after_cmdline, after_cmdline+1 );
+		//cria 2 descritores de arquivo com menor numero possivel e armazena em pfd
 		if(pipe(pfd) == -1){
 			printf("\nErro pipe!\n");
 			exit(EXIT_FAILURE);
@@ -209,7 +221,7 @@ void eval(char *cmdline, int frompipe, int ifd[2], int fdstd[2]) {
 			}
 		}
 
-		else{
+		else{ //Processo Pai
 			/* Adiciona processo a job list */
 			if (flagbg==1) {
 				addjob(jobs,pid,BG,cmdline);
